@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Loss Control</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Ballet&display=swap"
+      rel="stylesheet">
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,
+body{
+    width:100%;
+    min-height:100%;
+    overflow-x:hidden;
+    overflow-y:hidden;
+    background:black;
+    cursor:pointer;
+}
+
+body{
+    font-family:"Nanum Myeongjo", serif;
+}
+
+.screen{
+    position:relative;
+    width:100vw;
+    min-height:100vh;
+    overflow:visible;
+    background:black;
+}
+
+/* 글리치 이미지 */
+
+.glitch{
+    position:absolute;
+    inset:0;
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    opacity:0;
+     z-index:5;
+}
+
+.glitch.show{
+
+    opacity:1;
+
+    animation:glitchFlash 1s infinite;
+}
+@keyframes glitchFlash{
+
+    0%{
+        opacity:1;
+    }
+
+    8%{
+        opacity:0;
+    }
+
+    12%{
+        opacity:1;
+    }
+
+    18%{
+        opacity:0;
+    }
+
+    22%{
+        opacity:1;
+    }
+
+    30%{
+        opacity:0.15;
+    }
+
+    36%{
+        opacity:1;
+    }
+
+    45%{
+        opacity:0;
+    }
+
+    50%{
+        opacity:1;
+    }
+
+    58%{
+        opacity:0.3;
+    }
+
+    65%{
+        opacity:1;
+    }
+
+    72%{
+        opacity:0;
+    }
+
+    78%{
+        opacity:1;
+    }
+
+    100%{
+        opacity:1;
+    }
+
+}
+/* 문장 */
+
+.text{
+
+    position:absolute;
+
+    left:50%;
+    top:50%;
+
+    transform:translate(-50%,-50%);
+
+    width:100%;
+
+    text-align:center;
+
+    color:#FB00FF;
+
+    font-size:40px;
+    line-height:1.8;
+
+    z-index:20;
+}
+.kr{
+
+    color:#FB00FF;
+
+    font-family:"Nanum Myeongjo", serif;
+
+}
+
+.en{
+
+    color:#1E44FF;
+
+    font-family:"Hiragino Mincho ProN", serif;
+
+    font-size:72px;
+
+    font-weight:600;
+
+    letter-spacing:0.03em;
+
+    line-height:1.2;
+
+    text-transform:uppercase;
+
+}
+.loss{
+
+    color:#FB00FF;
+
+    font-family:"Hiragino Mincho ProN", serif;
+
+    font-size:90px;
+
+    letter-spacing:0.08em;
+
+}
+.montage{
+
+    position:absolute;
+    inset:0;
+
+    z-index:10;
+
+    pointer-events:none;
+}
+
+.montage-image{
+
+    position:absolute;
+    inset:0;
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    opacity:0;
+
+    transition:opacity 0.8s ease;
+    transform:scale(1);
+
+}
+
+.montage-image.active{
+
+    opacity:0.5;
+
+}
+.flash-video{
+
+    position:absolute;
+    inset:0;
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    opacity:0;
+
+    z-index:1;
+
+    transition:opacity 1s ease;
+
+}
+
+.iris{
+
+    display:none;
+
+    position:absolute;
+    inset:0;
+
+    background:black;
+
+    z-index:50;
+
+    pointer-events:none;
+
+    clip-path:circle(150% at 50% 50%);
+
+    transition:clip-path 1.5s ease;
+
+    mix-blend-mode:normal;
+}
+
+.iris.close{
+
+    clip-path:circle(0% at 50% 50%);
+}
+.bright-image{
+
+    position:absolute;
+    inset:0;
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    opacity:0;
+
+    z-index:40;
+
+    transition:opacity 15s ease;
+
+    animation:none;
+
+}
+@keyframes brightFlicker{
+
+    0%{
+        filter:brightness(0.1);
+    }
+
+    28%{
+        filter:brightness(0.35);
+    }
+
+    30%{
+        filter:brightness(1.4);
+    }
+
+    32%{
+        filter:brightness(0.4);
+    }
+
+    68%{
+        filter:brightness(0.75);
+    }
+
+    70%{
+        filter:brightness(1.4);
+    }
+
+    72%{
+        filter:brightness(0.8);
+    }
+
+    100%{
+        filter:brightness(1);
+    }
+
+}
+
+.black-flash{
+
+    position:absolute;
+    inset:0;
+
+    background:black;
+
+    opacity:0;
+
+    pointer-events:none;
+
+    z-index:999;
+
+}
+
+.black-flash.show{
+
+    animation:blackFlash 0.6s ease;
+}
+
+@keyframes blackFlash{
+
+    0%{
+        opacity:0;
+    }
+
+    20%{
+        opacity:1;
+    }
+
+    100%{
+        opacity:1;
+    }
+
+}
+
+.captured-wrap{
+
+    position:relative;
+
+    width:100%;
+    height:100vh;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    background:black;
+
+    overflow:hidden;
+}
+
+.captured-bg{
+
+    position:absolute;
+
+    left:50%;
+    top:50%;
+
+    transform:translate(-50%,-50%);
+
+    color:#1840ff;
+
+    font-family:"Ballet", cursive;
+
+    font-size:450px;
+
+    white-space:nowrap;
+
+    line-height:1;
+}
+
+.captured-front{
+
+    position:absolute;
+
+    left:50%;
+    top:60%;
+
+    transform:translate(-50%,-50%);
+
+    color:#ff00ff;
+
+    font-family:"Hiragino Mincho ProN", serif;
+
+    font-size:160px;
+
+    letter-spacing:2px;
+
+    white-space:nowrap;
+
+    z-index:2;
+}
+#section7{
+
+    width:100%;
+    min-height:100vh;
+
+    background:black;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+}
+
+.quote{
+
+    color:#ff00ff;
+
+    font-family:"Nanum Myeongjo", serif;
+
+    font-size:22px;
+
+    line-height:1.4;
+
+    text-align:center;
+
+}
+
+
+
+#section8{
+
+    display:none;
+
+    position:fixed;
+
+    inset:0;
+
+    background:black;
+
+    z-index:500;
+}
+
+#finalImage{
+
+    position:absolute;
+
+    inset:0;
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+}
+
+#overlay{
+
+    position:absolute;
+
+    inset:0;
+
+    background:black;
+
+    opacity:1;
+
+    pointer-events:none;
+}
+
+#endingText{
+
+    position:absolute;
+
+    left:176px;
+    top:700px;
+
+    transform:translate(-50%,-50%);
+
+    color:#001DAD;
+
+    text-align:left;
+
+    opacity:0;
+}
+#footer{
+
+    width:100%;
+    height:100vh;
+
+    position:relative;
+
+    background-image:url("footer-bg.jpg");
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+
+    overflow:hidden;
+}
+
+.footer-title{
+
+    position:absolute;
+
+    left:50%;
+    top:375px;
+
+    transform:translateX(-50%);
+
+    text-align:center;
+
+    width:1200px;
+
+    color:#ff00ff;
+
+    font-family:"Hiragino Mincho ProN", serif;
+
+    font-size:50px;
+
+    font-weight:700;
+
+    line-height:1.2;
+
+    z-index:10;
+}
+
+.footer-description{
+
+    position:absolute;
+
+    left:30px;
+    bottom:177px;
+
+    width:780px;
+
+    color:#001DAD;
+
+    font-family:"Nanum Myeongjo", serif;
+
+    font-size:18px;
+
+    line-height:1.4;
+
+    z-index:10;
+}
+
+.footer-info{
+
+    position:absolute;
+
+    right:30px;
+    bottom:20px;
+
+    color:#001DAD;
+
+    font-family:"Nanum Myeongjo", serif;
+
+    font-size:18px;
+
+    line-height:1.8;
+
+    text-align:left;
+
+    z-index:10;
+}
+
+.footer-copyright{
+
+    position:absolute;
+
+    left:30px;
+    bottom:20px;
+
+    color:#001DAD;
+
+    font-family:"Nanum Myeongjo", serif;
+
+    font-size:18px;
+
+    z-index:10;
+}
+</style>
+</head>
+
+<body>
+
+<div class="screen">
+<video class="flash-video"
+       autoplay
+       muted
+       loop
+       playsinline>
+
+    <source src="flash-background.mp4"
+            type="video/mp4">
+
+</video>
+    <img src="pink-glitch.jpg" class="glitch" id="glitch">
+
+    <div class="text" id="text"></div>
+    <div class="iris" id="iris"></div>
+
+<img src="bright.jpg"
+     class="bright-image"
+     id="brightImage">
+<div class="montage" id="montage">
+
+    <img src="montage1.jpg" class="montage-image">
+    <img src="montage2.jpg" class="montage-image">
+    <img src="montage3.jpg" class="montage-image">
+    <img src="montage4.jpg" class="montage-image">
+
+</div>
+
+<div class="black-flash" id="blackFlash"></div>
+
+<div id="section6"
+     class="captured-wrap"
+     style="display:none;">
+
+    <div class="captured-bg">
+        Captured
+    </div>
+
+    <div class="captured-front">
+        CAPTURED
+    </div>
+
+</div>
+
+<section id="section7" style="display:none;">
+
+    <div class="quote">
+
+        매혹은 스스로 선택하는 경험이 아니다.<br>
+        그것은 보이지 않는 힘에 의해 이끌리는 수동적인 경험이다.<br><br>
+
+        — 블랑쇼
+
+    </div>
+
+</section>
+
+</div>
+<section id="section8" style="display:none;">
+
+        <img
+            src="final-image-bright.jpg"
+            id="finalImage">
+
+        <div id="overlay"></div>
+
+        <div id="endingText">
+        </div>
+
+</section>
+
+<footer id="footer" style="display:none;">
+
+    <div class="footer-title">
+
+        La Fascination is not an active experience.<br>
+        It is something you passively undergo.
+
+    </div>
+
+    <div class="footer-description">
+
+    모리스 블랑쇼의 '매혹(Fascination)' 개념을 바탕으로 제작한 인터랙티브 웹 프로젝트이다.<br>
+    사용자는 화면을 탐색하며 스스로 선택하고 있다고 생각하지만,
+    점차 시선의 통제력을 잃고<br>특정 대상에 이끌리게 된다.
+    본 작업은 매혹을 단순한 끌림이 아닌,
+    이미 붙잡혀 있는<br>수동적 상태로 해석하며
+    이를 인터랙션을 통해 경험하도록 구성하였다.
+
+</div>
+
+<div class="footer-info">
+
+    <div>name　　　　정지현</div>
+    <div>e-mail　　　jihyeon1508@naver.com</div>
+    <div>instagram　 @__jjhyvn</div>
+    <div>address　　 seoultech university</div>
+
+</div>
+<div class="footer-copyright">
+
+    @2026 1학기 웹인터랙션디자인
+
+</div>
+</footer>
+<script>
+
+const glitch =
+document.getElementById("glitch");
+
+const text =
+document.getElementById("text");
+const montageImages =
+document.querySelectorAll(".montage-image");
+let stage = 0;
+let flashInterval;
+
+showStage1();
+
+document.body.addEventListener("click",()=>{
+
+    stage++;
+
+    if(stage === 1){
+
+        showStage2();
+
+    }
+
+    else if(stage === 2){
+
+        showStage3();
+
+    }
+    else if(stage === 3){
+
+    showStage4();
+
+}
+
+else if(stage === 4){
+
+    showStage5();
+
+}
+else if(stage === 5){
+
+    showStage6();
+
+}
+else if(stage === 6){
+
+    showStage7();
+
+}
+
+});
+
+document.addEventListener("click",()=>{
+
+    if(revealProgress < 0.95) return;
+
+    document.getElementById("section8")
+    .style.display = "none";
+
+    document.getElementById("footer")
+    .scrollIntoView({
+        behavior:"smooth"
+    });
+
+});
+
+function glitchTransition(imageSrc, callback){
+
+    text.innerHTML = "";
+
+    glitch.src = imageSrc;
+
+    glitch.classList.remove("show");
+
+    void glitch.offsetWidth;
+
+    glitch.classList.add("show");
+
+    setTimeout(()=>{
+
+        glitch.classList.remove("show");
+
+        callback();
+
+    },1200);
+
+}
+
+function showStage1(){
+
+    glitchTransition("glitch1.jpg", ()=>{
+
+        typeText("당신의 시선은");
+
+        startMontage();
+
+    });
+
+}
+
+function showStage2(){
+
+    text.innerHTML = "";
+
+    glitch.src = "glitch2.jpg";
+
+    glitch.classList.remove("show");
+
+    void glitch.offsetWidth;
+
+    glitch.classList.add("show");
+
+    setTimeout(()=>{
+
+        glitch.classList.remove("show");
+
+        document.getElementById("montage").style.display = "none";
+
+        typeText("이미 당신의 손을 떠났다.");
+
+    },1200);
+
+}
+function showStage3(){
+
+    glitchTransition("glitch3.jpg", ()=>{
+
+        const video =
+        document.querySelector(".flash-video");
+
+        video.playbackRate = 1.3;
+
+        video.style.opacity = "0.35";
+
+        video.play();
+
+        startFlashSequence();
+
+    });
+
+}
+let montageIndex = 0;
+
+function startMontage(){
+
+    montageImages[0].classList.add("active");
+
+    setInterval(()=>{
+
+        montageImages[montageIndex]
+        .classList.remove("active");
+
+        montageIndex++;
+
+        if(montageIndex >= montageImages.length){
+
+            montageIndex = 0;
+
+        }
+
+        montageImages[montageIndex]
+        .classList.add("active");
+
+    },500);
+
+}
+function typeText(sentence){
+
+    text.innerHTML = "";
+
+    let index = 0;
+
+    function typing(){
+
+        if(index < sentence.length){
+
+            text.innerHTML += sentence.charAt(index);
+
+            index++;
+
+            setTimeout(typing, 120);
+
+        }
+
+    }
+
+    typing();
+
+}
+function startFlashSequence(){
+
+   const flashItems = [
+
+{
+    text:"당신의 시선은 이미 당신의 손을 떠났다",
+    className:"kr"
+},
+
+{
+    text:"NO LONGER YOURS",
+    className:"en"
+},
+
+{
+    text:"당신은 선택한 것이 아닙니다",
+    className:"kr"
+},
+
+{
+    text:"YOU NEVER CHOSE",
+    className:"en"
+},
+
+{
+    text:"사로잡혔습니다",
+    className:"kr"
+},
+
+{
+    text:"CAPTURED",
+    className:"en"
+},
+
+{
+    text:"이미 붙잡혀 있었다",
+    className:"kr"
+},
+
+{
+    text:"ALREADY INSIDE IT",
+    className:"en"
+},
+
+{
+    text:"YOU LOST CONTROL",
+    className:"loss"
+}
+
+];
+
+    let flashIndex = 0;
+
+    flashInterval = setInterval(()=>{
+
+       text.innerHTML =
+flashItems[flashIndex].text;
+
+text.className =
+"text " + flashItems[flashIndex].className;
+
+        flashIndex++;
+
+        if(flashIndex >= flashItems.length){
+
+            flashIndex = 0;
+
+        }
+
+    },120);
+
+}
+
+function showStage4(){
+
+    clearInterval(flashInterval);
+
+    text.innerHTML = "";
+
+    document.querySelector(".flash-video")
+    .style.opacity = "0";
+
+    const iris =
+    document.getElementById("iris");
+
+    iris.style.display = "block";
+
+    iris.classList.add("close");
+
+    setTimeout(()=>{
+
+        setTimeout(()=>{
+
+            text.className = "text en";
+
+            typeText("You did not choose.");
+
+            setTimeout(()=>{
+
+                eraseText(()=>{
+
+                    typeText("You had already been");
+
+                });
+
+            },2500);
+
+        },1000);
+
+    },800);
+
+}
+function eraseText(callback){
+
+    let current =
+    text.textContent;
+
+    function erase(){
+
+        if(current.length > 0){
+
+            current =
+            current.slice(0,-1);
+
+            text.textContent =
+            current;
+
+            setTimeout(erase,50);
+
+        }
+
+        else{
+
+            callback();
+
+        }
+
+    }
+
+    erase();
+
+}
+
+function typeEndingText(){
+
+    endingText.innerHTML = "";
+
+    let index = 0;
+
+    function typing(){
+
+        if(index < endingSentence.length){
+
+            const char =
+            endingSentence.charAt(index);
+
+            if(char === "\n"){
+
+                endingText.innerHTML += "<br>";
+
+            }else{
+
+                endingText.innerHTML += char;
+
+            }
+
+            index++;
+
+            setTimeout(typing,60);
+
+        }
+
+    }
+
+    typing();
+
+}
+function showStage5(){
+
+    const brightImage =
+    document.getElementById("brightImage");
+
+    const iris =
+    document.getElementById("iris");
+
+    text.innerHTML = "";
+
+   iris.style.display = "none";
+
+brightImage.style.opacity = "1";
+brightImage.style.animation =
+"brightFlicker 15s linear forwards";
+
+}
+function showStage6(){
+
+    const flash =
+    document.getElementById("blackFlash");
+
+    flash.classList.add("show");
+
+    setTimeout(()=>{
+
+        flash.style.display = "none";
+
+        document.getElementById("brightImage")
+        .style.display = "none";
+
+        document.getElementById("section6")
+        .style.display = "flex";
+
+        document.getElementById("section7")
+        .style.display = "flex";
+
+        document.body.style.overflowY = "auto";
+        document.documentElement.style.overflowY = "auto";
+
+    },600);
+
+}
+function showStage7(){
+
+    document.querySelector(".screen")
+    .style.display = "none";
+
+    document.getElementById("section8")
+    .style.display = "block";
+
+    document.getElementById("footer")
+    .style.display = "flex";
+
+    document.body.style.overflowY = "auto";
+    document.documentElement.style.overflowY = "auto";
+
+    window.scrollTo(0,0);
+
+    overlay.style.opacity = 1;
+    endingText.style.opacity = 0;
+
+}
+
+const overlay =
+document.getElementById("overlay");
+
+const endingText =
+document.getElementById("endingText");
+
+const endingSentence = `매혹은 단순한 끌림이 아니다.
+그것은 당신을 멈추게 하고,붙잡고,
+계속해서 바라보게 만든다.
+
+결국 당신은 깨닫게 된다.
+
+당신이 그것을 바라보고 있었던 것이 아니다.
+당신은 이미 오래전부터 그 안에 있었다.`;
+
+let revealProgress = 0;
+let textStarted = false;
+
+window.addEventListener("wheel",(e)=>{
+
+    const section8 =
+    document.getElementById("section8");
+
+    if(section8.style.display === "none")
+    return;
+
+    e.preventDefault();
+
+    revealProgress += e.deltaY * 0.0008;
+
+    revealProgress =
+    Math.max(
+        0,
+        Math.min(revealProgress,1)
+    );
+
+    overlay.style.opacity =
+    1 - revealProgress;
+if(revealProgress >= 0.95){
+
+    endingText.style.opacity = 1;
+
+    if(!textStarted){
+
+        typeEndingText();
+
+        textStarted = true;
+
+    }
+
+}else{
+
+    endingText.style.opacity = 0;
+
+    textStarted = false;
+
+}
+},{passive:false});
+
+</script>
+
+</body>
+</html>

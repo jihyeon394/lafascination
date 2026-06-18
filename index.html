@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Fascination</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com"> 
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Ballet&family=Explora&family=Nanum+Myeongjo:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,
+body{
+    width:100%;
+    min-height:100%;
+}
+
+body{
+    overflow-x:hidden;
+    background:black;
+}
+
+/* ================= SECTION 1 ================= */
+
+.cover{
+    position:relative;
+    width:100vw;
+    height:100vh;
+    isolation:isolate;
+
+    background:linear-gradient(
+        180deg,
+        #FB00FF 0%,
+        #000000 77%,
+        #000000 100%
+    );
+}
+
+.bg-video{
+    position:absolute;
+    inset:0;
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    opacity:0.5;
+    mix-blend-mode:normal;
+
+    z-index:1;
+
+    pointer-events:none;
+}
+.title-back{
+    position:absolute;
+    left:50%;
+    top:80%;
+
+    transform:translate(-50%,-50%) scaleY(1.5);
+
+    font-family:"Ballet", cursive;
+    font-size:247px;
+    font-weight:400;
+
+    color:#1E44FF;
+
+    white-space:nowrap;
+
+    z-index:2;
+}
+
+.title-front{
+    position:absolute;
+    left:50%;
+    top:80%;
+
+    transform:translate(-50%,-50%);
+
+    font-family:"Explora", serif;
+    font-size:378px;
+    font-weight:400;
+    line-height:1.25;
+
+    color:#FB00FF;
+
+    white-space:nowrap;
+
+    z-index:3;
+    opacity:0;
+
+    animation:flickerOn 2.5s forwards;
+}
+
+@keyframes flickerOn{
+    0%,10%,20%,30%{
+        opacity:0;
+    }
+
+    5%,15%,25%{
+        opacity:1;
+    }
+
+    40%{
+        opacity:0.2;
+    }
+
+    60%{
+        opacity:0.7;
+    }
+
+    80%{
+        opacity:0.9;
+    }
+
+    100%{
+        opacity:1;
+    }
+}
+
+/* ================= SECTION 2 ================= */
+
+.scene2{
+    position:relative;
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
+
+    background:black;
+}
+
+/* 전체 배경 사진 */
+
+.scene-bg{
+    position:absolute;
+    left:0;
+    top:0;
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    filter:blur(5px) brightness(0.38) saturate(0.85);
+
+    transform:scale(1.04);
+
+    z-index:1;
+}
+
+/* 어두운 색감 오버레이 */
+
+.scene2::after{
+    content:"";
+    position:absolute;
+    inset:0;
+
+    background:linear-gradient(
+        180deg,
+        rgba(0,0,0,0.1) 0%,
+        rgba(0,0,0,0.35) 55%,
+        rgba(0,0,0,0.75) 100%
+    );
+
+    z-index:2;
+    pointer-events:none;
+}
+
+/* 왼쪽 사진 */
+
+.left-photo{
+    position:absolute;
+    left:0px;
+    bottom:-81px;
+
+    width:380px;
+
+    object-fit:cover;
+
+    opacity:1;
+    filter:none;
+
+    z-index:4;
+}
+
+/* 오른쪽 사진 */
+
+.right-photo{
+    position:absolute;
+    right:0px;
+    top:-192px;
+
+    width:521px;
+
+    object-fit:cover;
+
+    opacity:1;
+    filter:none;
+
+    z-index:4;
+}
+
+/* 커서 따라오는 밝은 박스 공통 */
+
+.focus-box{
+    position:absolute;
+
+    width:300px;
+    height:300px;
+
+    overflow:hidden;
+
+    border:2px solid #1E44FF;
+
+    pointer-events:none;
+
+    z-index:20;
+
+    opacity:0;
+    transition:opacity 0.2s ease;
+}
+
+.focus-box img{
+    position:absolute;
+
+    width:100vw;
+    height:100vh;
+
+    object-fit:cover;
+
+    filter:none;
+}
+
+
+/* 텍스트 */
+
+.scene-text{
+    position:absolute;
+    left:443px;
+    top:643px;
+
+    font-family:"Explora", serif;
+    font-size:75px;
+    color:#FB00FF;
+
+    z-index:10;
+}
+
+.scene-text.small{
+    left:780px;
+    top:486px;
+    font-size:75px;
+}
+.control{
+    left:175px;
+    top:163px;
+
+    font-size:75px;
+}
+
+.korean-text{
+    white-space:pre-line;
+    position:absolute;
+    right:0px;
+    top:629px;
+
+    width:402px;
+
+    font-family:"Nanum Myeongjo", serif;
+    font-size:16px;
+    line-height:1.7;
+
+    color:#FB00FF;
+
+    z-index:10;
+}
+.line{
+    position:absolute;
+
+    height:1.5px;
+
+    background:#FB00FF;
+
+    z-index:15;
+
+    transform-origin:left center;
+}
+
+.line1{
+    left:234px;
+    top:606px;
+
+    width:210px;
+
+    transform:rotate(25deg);
+}
+
+.line2{
+    left:927px;
+    top:504px;
+
+    width:259px;
+
+    transform:rotate(-50deg);
+}
+.quote-left{
+    position:absolute;
+    left:1088px;
+    top:656px;
+
+    width:13px;
+
+    z-index:15;
+}
+
+.quote-right{
+    position:absolute;
+    left:1442px;
+    top:802px;
+
+    width:13px;
+
+    z-index:15;
+}
+/* ================= SCENE 3 ================= */
+
+.scene3{
+    display:none;
+
+    width:100vw;
+    height:100vh;
+
+    background:black;
+}
+
+.scene3.open{
+    display:flex;
+}
+
+.panel{
+    position:relative;
+
+    width:25%;
+    height:100%;
+
+    overflow:hidden;
+
+    opacity:0;
+
+   transition:opacity 1.2s ease;
+}
+
+.panel.show{
+    opacity:1;
+    transform:translateY(0);
+}
+
+.panel1{
+    background:#FB00FF;
+}
+
+.panel-korean{
+    position:absolute;
+
+    left:30px;
+    top:540px;
+
+    transform:none;
+
+    width:80%;
+
+    white-space:pre-line;
+
+    font-family:"Nanum Myeongjo", serif;
+    font-size:16px;
+    line-height:1.8;
+
+    color:#001DAD;
+
+    z-index:30;
+}
+
+.panel img{
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+}
+
+.panel2 img{
+    animation:float 7s ease-in-out infinite;
+}
+
+.panel3 img{
+   animation:float 7s ease-in-out infinite;
+}
+
+.panel4 img{animation:float 7s ease-in-out infinite;
+}
+
+.panel-question{
+    position:absolute;
+
+    left:50%;
+    top:50%;
+
+    transform:translate(-50%,-50%);
+
+    font-family:"Explora", serif;
+    font-size:46px;
+
+    white-space:nowrap;
+
+    color:#FB00FF;
+
+    z-index:20;
+}
+
+@keyframes float{
+
+    0%{
+        transform:translateY(0px);
+    }
+
+    50%{
+        transform:translateY(-8px);
+    }
+
+    100%{
+        transform:translateY(0px);
+    }
+}
+.scene4{
+    position:relative;
+
+    width:100vw;
+    height:250vh;
+
+    overflow:hidden;
+
+    background:black;
+}
+
+.scene4-bg{
+    position:absolute;
+
+    left:50%;
+    top:0;
+
+    transform:translateX(-50%);
+
+    width:100vw;
+    height:auto;
+
+    min-height:250vh;
+
+    object-fit:cover;
+}
+
+.video-wrap{
+    width:78%;
+    height:auto;
+
+    display:block;
+
+    position:relative;
+    left:50%;
+    top:50%;
+
+    aspect-ratio:16/9;
+
+    transform:translate(-50%,-50%);
+}
+
+.video-wrap video{
+    position:absolute;
+    top:0;
+    left:0;
+
+    width:1179.36px;
+    height:663.383px;
+}
+
+.scene4-image{
+    position:absolute;
+    top:0;
+    left:0;
+
+    width:1179.36px;
+    height:663.383;
+
+    z-index:100;
+
+    opacity:0;
+}
+
+.scene4-image{
+    opacity:0;
+}
+
+.scene4-image.show{
+    opacity:1;
+}
+
+.scene4-video.hide{
+    opacity:0;
+
+    transition:opacity 0.8s ease;
+}
+
+.scene4{
+    display:none;
+
+    position:relative;
+
+    width:100vw;
+    height:250vh;
+
+    overflow:hidden;
+
+    background:black;
+}
+
+.scene4.open{
+    display:block;
+}
+
+.scene4-image2{
+    cursor:pointer;
+}
+.text-image{
+    position:absolute;
+    top:0;
+    left:0;
+
+    width:1179.36;
+    height:auto;
+
+    object-fit:cover;
+
+    opacity:0;
+    pointer-events:none;
+
+    z-index:300;
+}
+
+.text-image.show{
+    animation:textFlicker 1s infinite;
+    opacity:1;
+}
+
+@keyframes textFlicker{
+
+    0%{opacity:0;}
+    10%{opacity:1;}
+    20%{opacity:0;}
+    30%{opacity:1;}
+    40%{opacity:0.2;}
+    50%{opacity:1;}
+    60%{opacity:0;}
+    70%{opacity:1;}
+    100%{opacity:1;}
+}
+
+.ending-typing{
+    position:absolute;
+
+    left:330.219px;
+    top:-39.7969px;
+
+    transform:translate(-50%,-50%);
+
+    width:650px;
+
+    text-align:left;
+
+    white-space:pre-line;
+
+    font-family:"Nanum Myeongjo", serif;
+    font-size:18px;
+    line-height:1.8;
+
+    color:#001DAD;
+
+    z-index:500;
+
+    pointer-events:none;
+}
+</style>
+</head>
+
+<body>
+
+<section class="cover">
+
+   <video class="bg-video" autoplay muted loop playsinline>
+    <source src="wave.mp4" type="video/mp4">
+</video>
+    <h1 class="title-back">La Fascination</h1>
+    <h1 class="title-front">La Fascination</h1>
+
+</section>
+
+<section class="scene2">
+
+    <img class="scene-bg" src="forest.jpg" alt="forest background">
+
+    <img class="left-photo" src="left.png" alt="left image">
+    <img class="right-photo" src="right.png" alt="right image">
+
+    <div class="focus-box focus1">
+    <img src="forest.jpg" class="focus-img">
+</div>
+<div class="line line1"></div>
+<div class="line line2"></div>
+
+    <p class="scene-text control">
+    you control what you perceive.</p>
+    <p class="scene-text">you see.</p>
+    <p class="scene-text small">you choose.</p>
+
+    <p class="korean-text" id="typingText">
+    </p>
+<img class="quote-left" src="quote-left.png">
+<img class="quote-right" src="quote-right.png">
+</section>
+
+<section class="scene3">
+
+    <div class="panel panel1">
+      <p class="panel-korean" id="scene3Typing"></p>
+    </div>
+
+    <div class="panel panel2">
+        <img src="noise1.jpg">
+       <p class="panel-question">Are you truly seeing?</p>
+    </div>
+
+    <div class="panel panel3">
+        <img src="noise2.jpg">
+        <p class="panel-question">Are you truly the one choosing?</p>
+    </div>
+
+    <div class="panel panel4">
+        <img src="noise3.jpg">
+        <p class="panel-question">Are you truly in control?</p>
+    </div>
+
+</section>
+<section class="scene4">
+
+    <img src="scene4-bg.jpg" class="scene4-bg">
+
+    <div class="video-wrap">
+
+    <video id="scene4Video" autoplay muted loop playsinline>
+        <source src="glitch.mp4" type="video/mp4">
+
+    </video>
+
+    <img src="final-image.jpg" class="scene4-image">
+    <p class="ending-typing" id="endingTyping"></p>
+    <img src="group-image.png" class="scene4-image scene4-image2">
+    <img src="text.png" class="text-image">
+
+
+</div>
+
+</section>
+<script>
+const scene2 = document.querySelector(".scene2");
+const focus1 = document.querySelector(".focus1");
+
+const focusImg1 = document.querySelector(".focus1 img");
+
+const leftPhoto = document.querySelector(".left-photo");
+const rightPhoto = document.querySelector(".right-photo");
+
+scene2.addEventListener("mousemove", function(e){
+
+    const rect = scene2.getBoundingClientRect();
+
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+const hovered = document.elementFromPoint(
+    e.clientX,
+    e.clientY
+);
+
+if(hovered === leftPhoto){
+
+    focusImg1.src = "left.png";
+}
+
+else if(hovered === rightPhoto){
+
+    focusImg1.src = "right.png";
+
+}
+
+else{
+
+    focusImg1.src = "forest.jpg";
+
+}
+    const size1 = 300;
+    focus1.style.opacity = 1;
+
+    focus1.style.left = (x - size1 / 2) + "px";
+    focus1.style.top = (y - size1 / 2) + "px";
+
+    focusImg1.style.left = -(x - size1 / 2) + "px";
+    focusImg1.style.top = -(y - size1 / 2) + "px";
+
+});
+
+scene2.addEventListener("mouseleave", function(){
+    focus1.style.opacity = 0;
+});
+const text = `당신의 앞에 매혹적인 무언가가 놓여 있습니다.
+당신은 무엇을 볼지, 얼마나 오래 시선을 둘지,
+스스로 결정한다고 믿고있습니다.
+
+당신은 보는 주체가 자신이라고 생각합니다.
+시선이 자신의 통제 아래 있다고 믿고있습니다.`;
+
+const typingTarget = document.getElementById("typingText");
+
+let charIndex = 0;
+let typingStarted = false;
+
+function typeWriter(){
+
+    if(charIndex < text.length){
+
+        typingTarget.textContent += text.charAt(charIndex);
+
+        charIndex++;
+
+        setTimeout(typeWriter, 45);
+         }else{
+
+        scene3.classList.add("open");
+    
+    }
+}
+
+const observer = new IntersectionObserver((entries)=>{
+
+    entries.forEach(entry=>{
+
+        if(entry.isIntersecting && !typingStarted){
+
+            typingStarted = true;
+                       typeWriter();
+
+        }
+
+    });
+
+},{
+    threshold:0.5
+});
+
+observer.observe(scene2);
+
+const scene3 = document.querySelector(".scene3");
+const scene4 = document.querySelector(".scene4");
+const scene3TypingTarget = document.getElementById("scene3Typing");
+
+
+const scene3Text = `이 시선이 처음부터 당신의 것이
+아니었다면 어떨까?
+
+당신이 알아차리기 훨씬 전부터 이미
+그 대상에게 이끌리고 있는거라면?
+
+정말 바라보고 있는 것은 당신인가?
+정말 선택하고 있는 것은 당신인가?
+정말 통제하고 있는 것은 당신인가?`;
+
+let scene3CharIndex = 0;
+let scene3TypingStarted = false;
+
+function typeScene3(){
+
+    if(scene3CharIndex < scene3Text.length){
+
+        scene3TypingTarget.textContent += scene3Text.charAt(scene3CharIndex);
+
+        scene3CharIndex++;
+
+        setTimeout(typeScene3, 45);
+
+    }else{
+
+    scene4.classList.add("open");
+
+
+setTimeout(()=>{
+
+    scene4Images.forEach(img=>{
+        img.classList.add("show");
+    });
+
+    endingType();
+
+},5000);
+
+}}
+
+
+const panels = document.querySelectorAll(".panel");
+
+const scene3Observer = new IntersectionObserver((entries)=>{
+
+    entries.forEach(entry=>{
+
+     if(entry.isIntersecting){
+
+    panels.forEach((panel,index)=>{
+
+        setTimeout(()=>{
+
+            panel.classList.add("show");
+
+        }, index * 500);
+
+    });
+
+if(!scene3TypingStarted){
+
+    scene3TypingStarted = true;
+
+    setTimeout(()=>{
+
+        typeScene3();
+
+    }, 3000);
+
+}
+}
+
+    });
+
+},{
+    threshold:0.4
+});
+
+scene3Observer.observe(scene3);
+
+const video = document.getElementById("scene4Video");
+
+video.addEventListener("loadeddata",()=>{
+
+    video.playbackRate = 1.4;
+
+});
+
+const scene4Images =
+document.querySelectorAll(".scene4-image");
+
+const clickableImage =
+document.querySelector(".scene4-image2");
+
+const textImage =
+document.querySelector(".text-image");
+
+const endingText =
+`어쩌면 당신은 바라보고 있었던 것이 아니라, 이미 사로잡혀 있었던 건 아닐까요?
+계속하려면 클릭하세요.`;
+
+const endingTarget =
+document.getElementById("endingTyping");
+
+let endingIndex = 0;
+
+function endingType(){
+
+    if(endingIndex < endingText.length){
+
+        endingTarget.textContent += endingText.charAt(endingIndex);
+
+        endingIndex++;
+
+        setTimeout(endingType,45);
+    }
+}
+
+let clickCount = 0;
+
+clickableImage.addEventListener("click",()=>{
+
+    clickCount++;
+
+    if(clickCount === 1){
+
+        textImage.classList.add("show");
+
+    }else if(clickCount === 2){
+
+        window.location.href = "next.html";
+
+    }
+
+});
+</script>
+
+</body>
+</html>
